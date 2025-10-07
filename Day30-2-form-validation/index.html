@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Form Validation Example</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card">
+        <h1>Form Validation</h1>
+        <form id="signup" novalidate>
+            <div class="row">
+                <div class="field">
+                    <label for="first">First Name</label>
+                    <input id="first" name="first" type="text" required />
+                    <small class="error" id="err-first"></small>
+                </div>
+
+                <div class="field">
+                    <label for="last">Last Name</label>
+                    <input id="last" name="last" type="text" required />
+                    <small class="error" id="err-last"></small>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required />
+                <small class="error" id="err-email"></small>
+            </div>
+
+            <!-- Password with toggle -->
+            <div class="field password-field">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input id="password" name="password" type="password" required />
+                    <button type="button" id="toggle-password" class="toggle-btn">show</button>
+                </div>
+                <small class="hint">7–16 chars, one uppercase, one number, must include '@'</small>
+                <small class="error" id="err-password"></small>
+            </div>
+
+            <div class="field">
+                <label for="phone">Telephone</label>
+                <input id="phone" name="phone" type="tel" required />
+                <small class="error" id="err-phone"></small>
+            </div>
+
+            <div class="field">
+                <label for="bio">Your Bio</label>
+                <textarea id="bio" name="bio" rows="3" maxlength="50"></textarea>
+                <small class="error" id="err-bio"></small>
+            </div>
+
+            <button type="submit">Submit</button>
+            <p id="form-message"></p>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

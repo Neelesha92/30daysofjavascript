@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced JavaScript Todo List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Advanced Todo List</h1>
+
+        <div class="input-section">
+            <input type="text" id="todoInput" placeholder="What needs to be done?">
+            <button id="addBtn">Add Todo</button>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+
+        <ul id="todoList"></ul>
+
+        <div class="actions">
+            <button id="clearCompleted">Clear Completed</button>
+        </div>
+
+        <div class="stats">
+            <span id="todoCount">0 items left</span>
+        </div>
+
+        <div class="keyboard-shortcuts">
+            <small>Press <kbd>Enter</kbd> to add • <kbd>Ctrl+A</kbd> to focus input • <kbd>Esc</kbd> to clear</small>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

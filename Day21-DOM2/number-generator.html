@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .even {
+            background-color: green;
+        }
+
+        .odd {
+            background-color: yellow;
+            color: black;
+        }
+
+        .prime {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="number-container"></div>
+
+    <script>
+        function isPrime(num) {
+            if (num < 2) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i == 0) return false;
+            }
+            return true;
+        }
+
+
+        const container = document.getElementById("number-container");
+
+        for (let i = 1; i <= 100; i++) {
+            const numDiv = document.createElement("div");
+            numDiv.classList.add("number");
+
+            // prime check first(it overrides other colors)
+            if (isPrime(i)) {
+                numDiv.classList.add("Prime");
+            } else if (i % 2 === 0) {
+                numDiv.classList.add("even");
+            } else {
+                numDiv.classList.add("odd");
+            }
+
+            numDiv.textContent = i;
+            container.appendChild(numDiv);
+        }
+
+
+    </script>
+
+</body>
+
+</html>

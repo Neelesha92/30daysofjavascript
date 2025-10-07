@@ -1,0 +1,27 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<h1>Giving feedback using blur event</h1>
+
+<input type="text" id="mass" placeholder="say something" />
+<p></p>
+
+<script>
+    const input = document.querySelector('input');
+    const p = document.querySelector('p')
+
+    input.addEventListener('blur', (e) => {
+        p.textContent = 'Field is required'
+        p.style.color = 'red'
+    })
+</script>
+
+<body>
+
+</body>
+
+</html>

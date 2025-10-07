@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Search Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .letter-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-btn:hover {
+            background-color: #4ca1af;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .letter-btn.active {
+            background-color: #2c3e50;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ced4da;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #4ca1af;
+        }
+
+        #searchBtn {
+            padding: 12px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #searchBtn:hover {
+            background-color: #4ca1af;
+        }
+
+        .results-section {
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .results-count {
+            font-size: 1.2rem;
+            color: #495057;
+        }
+
+        .sort-options select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            background-color: white;
+        }
+
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .country-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .country-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .country-flag {
+            height: 150px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #6c757d;
+        }
+
+        .country-info {
+            padding: 15px;
+        }
+
+        .country-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .country-details {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .countries-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .letter-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Country Search Visualization</h1>
+            <p class="subtitle">Browse countries by starting letter or search by name</p>
+        </header>
+
+        <section class="search-section">
+            <div class="letter-selector" id="letterSelector">
+                <!-- Letters will be generated by JavaScript -->
+            </div>
+
+            <div class="search-controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search for a country...">
+                    <button id="searchBtn">Search</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">Select a letter to view countries</div>
+                <div class="sort-options">
+                    <select id="sortOptions">
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="countries-grid" id="countriesGrid">
+                <!-- Country cards will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <footer>
+            <p>Country Search Visualization &copy; 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample country data (in a real application, this would come from an API)
+        const countries = [
+            { name: "Afghanistan", continent: "Asia", population: "38.9M" },
+            { name: "Albania", continent: "Europe", population: "2.9M" },
+            { name: "Algeria", continent: "Africa", population: "43.9M" },
+            { name: "Andorra", continent: "Europe", population: "77,000" },
+            { name: "Angola", continent: "Africa", population: "32.9M" },
+            { name: "Argentina", continent: "South America", population: "45.4M" },
+            { name: "Armenia", continent: "Asia", population: "3.0M" },
+            { name: "Australia", continent: "Oceania", population: "25.7M" },
+            { name: "Austria", continent: "Europe", population: "8.9M" },
+            { name: "Azerbaijan", continent: "Asia", population: "10.1M" },
+            { name: "Bahamas", continent: "North America", population: "393,000" },
+            { name: "Bahrain", continent: "Asia", population: "1.7M" },
+            { name: "Bangladesh", continent: "Asia", population: "165.2M" },
+            { name: "Barbados", continent: "North America", population: "287,000" },
+            { name: "Belarus", continent: "Europe", population: "9.4M" },
+            { name: "Belgium", continent: "Europe", population: "11.6M" },
+            { name: "Belize", continent: "North America", population: "397,000" },
+            { name: "Benin", continent: "Africa", population: "12.1M" },
+            { name: "Bhutan", continent: "Asia", population: "771,000" },
+            { name: "Bolivia", continent: "South America", population: "11.7M" },
+            { name: "Brazil", continent: "South America", population: "213.5M" },
+            { name: "Bulgaria", continent: "Europe", population: "6.9M" },
+            { name: "Burkina Faso", continent: "Africa", population: "20.9M" },
+            { name: "Burundi", continent: "Africa", population: "11.9M" },
+            { name: "Cambodia", continent: "Asia", population: "16.7M" },
+            { name: "Cameroon", continent: "Africa", population: "26.5M" },
+            { name: "Canada", continent: "North America", population: "38.0M" },
+            { name: "Chad", continent: "Africa", population: "16.4M" },
+            { name: "Chile", continent: "South America", population: "19.1M" },
+            { name: "China", continent: "Asia", population: "1,402M" },
+            { name: "Colombia", continent: "South America", population: "50.9M" },
+            { name: "Croatia", continent: "Europe", population: "4.1M" },
+            { name: "Cuba", continent: "North America", population: "11.3M" },
+            { name: "Cyprus", continent: "Europe", population: "1.2M" },
+            { name: "Denmark", continent: "Europe", population: "5.8M" },
+            { name: "Djibouti", continent: "Africa", population: "988,000" },
+            { name: "Dominica", continent: "North America", population: "72,000" },
+            { name: "Ecuador", continent: "South America", population: "17.6M" },
+            { name: "Egypt", continent: "Africa", population: "102.3M" },
+            { name: "Eritrea", continent: "Africa", population: "3.5M" },
+            { name: "Estonia", continent: "Europe", population: "1.3M" },
+            { name: "Ethiopia", continent: "Africa", population: "115.0M" },
+            { name: "Fiji", continent: "Oceania", population: "896,000" },
+            { name: "Finland", continent: "Europe", population: "5.5M" },
+            { name: "France", continent: "Europe", population: "67.4M" },
+            { name: "Gabon", continent: "Africa", population: "2.2M" },
+            { name: "Gambia", continent: "Africa", population: "2.4M" },
+            { name: "Georgia", continent: "Asia", population: "3.7M" },
+            { name: "Germany", continent: "Europe", population: "83.2M" },
+            { name: "Ghana", continent: "Africa", population: "31.1M" },
+            { name: "Greece", continent: "Europe", population: "10.4M" },
+            { name: "Grenada", continent: "North America", population: "112,000" },
+            { name: "Guatemala", continent: "North America", population: "17.9M" },
+            { name: "Guinea", continent: "Africa", population: "13.1M" },
+            { name: "Guyana", continent: "South America", population: "787,000" },
+            { name: "Haiti", continent: "North America", population: "11.4M" },
+            { name: "Honduras", continent: "North America", population: "9.9M" },
+            { name: "Hungary", continent: "Europe", population: "9.6M" },
+            { name: "Iceland", continent: "Europe", population: "341,000" },
+            { name: "India", continent: "Asia", population: "1,380M" },
+            { name: "Indonesia", continent: "Asia", population: "273.5M" },
+            { name: "Iran", continent: "Asia", population: "83.9M" },
+            { name: "Iraq", continent: "Asia", population: "40.2M" },
+            { name: "Ireland", continent: "Europe", population: "4.9M" },
+            { name: "Israel", continent: "Asia", population: "9.3M" },
+            { name: "Italy", continent: "Europe", population: "60.4M" },
+            { name: "Jamaica", continent: "North America", population: "3.0M" },
+            { name: "Japan", continent: "Asia", population: "126.5M" },
+            { name: "Jordan", continent: "Asia", population: "10.2M" },
+            { name: "Kazakhstan", continent: "Asia", population: "18.8M" },
+            { name: "Kenya", continent: "Africa", population: "53.8M" },
+            { name: "Kuwait", continent: "Asia", population: "4.3M" },
+            { name: "Laos", continent: "Asia", population: "7.3M" },
+            { name: "Latvia", continent: "Europe", population: "1.9M" },
+            { name: "Lebanon", continent: "Asia", population: "6.8M" },
+            { name: "Liberia", continent: "Africa", population: "5.1M" },
+            { name: "Libya", continent: "Africa", population: "6.9M" },
+            { name: "Lithuania", continent: "Europe", population: "2.7M" },
+            { name: "Luxembourg", continent: "Europe", population: "625,000" },
+            { name: "Madagascar", continent: "Africa", population: "27.7M" },
+            { name: "Malawi", continent: "Africa", population: "19.1M" },
+            { name: "Malaysia", continent: "Asia", population: "32.4M" },
+            { name: "Maldives", continent: "Asia", population: "541,000" },
+            { name: "Mali", continent: "Africa", population: "20.3M" },
+            { name: "Malta", continent: "Europe", population: "441,000" },
+            { name: "Mexico", continent: "North America", population: "128.9M" },
+            { name: "Moldova", continent: "Europe", population: "4.0M" },
+            { name: "Monaco", continent: "Europe", population: "39,000" },
+            { name: "Mongolia", continent: "Asia", population: "3.3M" },
+            { name: "Montenegro", continent: "Europe", population: "628,000" },
+            { name: "Morocco", continent: "Africa", population: "36.9M" },
+            { name: "Mozambique", continent: "Africa", population: "31.3M" },
+            { name: "Myanmar", continent: "Asia", population: "54.4M" },
+            { name: "Namibia", continent: "Africa", population: "2.5M" },
+            { name: "Nepal", continent: "Asia", population: "29.1M" },
+            { name: "Netherlands", continent: "Europe", population: "17.4M" },
+            { name: "New Zealand", continent: "Oceania", population: "4.8M" },
+            { name: "Nicaragua", continent: "North America", population: "6.6M" },
+            { name: "Niger", continent: "Africa", population: "24.2M" },
+            { name: "Nigeria", continent: "Africa", population: "206.1M" },
+            { name: "North Korea", continent: "Asia", population: "25.8M" },
+            { name: "Norway", continent: "Europe", population: "5.4M" },
+            { name: "Oman", continent: "Asia", population: "5.1M" },
+            { name: "Pakistan", continent: "Asia", population: "220.9M" },
+            { name: "Panama", continent: "North America", population: "4.3M" },
+            { name: "Paraguay", continent: "South America", population: "7.1M" },
+            { name: "Peru", continent: "South America", population: "32.8M" },
+            { name: "Philippines", continent: "Asia", population: "109.6M" },
+            { name: "Poland", continent: "Europe", population: "37.8M" },
+            { name: "Portugal", continent: "Europe", population: "10.2M" },
+            { name: "Qatar", continent: "Asia", population: "2.9M" },
+            { name: "Romania", continent: "Europe", population: "19.3M" },
+            { name: "Russia", continent: "Europe/Asia", population: "144.1M" },
+            { name: "Rwanda", continent: "Africa", population: "12.9M" },
+            { name: "Samoa", continent: "Oceania", population: "198,000" },
+            { name: "Saudi Arabia", continent: "Asia", population: "34.8M" },
+            { name: "Senegal", continent: "Africa", population: "16.7M" },
+            { name: "Serbia", continent: "Europe", population: "6.9M" },
+            { name: "Seychelles", continent: "Africa", population: "98,000" },
+            { name: "Singapore", continent: "Asia", population: "5.7M" },
+            { name: "Slovakia", continent: "Europe", population: "5.5M" },
+            { name: "Slovenia", continent: "Europe", population: "2.1M" },
+            { name: "Somalia", continent: "Africa", population: "15.9M" },
+            { name: "South Africa", continent: "Africa", population: "59.3M" },
+            { name: "South Korea", continent: "Asia", population: "51.7M" },
+            { name: "Spain", continent: "Europe", population: "46.8M" },
+            { name: "Sri Lanka", continent: "Asia", population: "21.4M" },
+            { name: "Sudan", continent: "Africa", population: "43.8M" },
+            { name: "Sweden", continent: "Europe", population: "10.4M" },
+            { name: "Switzerland", continent: "Europe", population: "8.6M" },
+            { name: "Syria", continent: "Asia", population: "17.5M" },
+            { name: "Taiwan", continent: "Asia", population: "23.6M" },
+            { name: "Tajikistan", continent: "Asia", population: "9.5M" },
+            { name: "Tanzania", continent: "Africa", population: "59.7M" },
+            { name: "Thailand", continent: "Asia", population: "69.8M" },
+            { name: "Togo", continent: "Africa", population: "8.3M" },
+            { name: "Tonga", continent: "Oceania", population: "105,000" },
+            { name: "Tunisia", continent: "Africa", population: "11.8M" },
+            { name: "Turkey", continent: "Asia/Europe", population: "84.3M" },
+            { name: "Turkmenistan", continent: "Asia", population: "6.0M" },
+            { name: "Uganda", continent: "Africa", population: "45.7M" },
+            { name: "Ukraine", continent: "Europe", population: "41.7M" },
+            { name: "United Arab Emirates", continent: "Asia", population: "9.9M" },
+            { name: "United Kingdom", continent: "Europe", population: "67.2M" },
+            { name: "United States", continent: "North America", population: "331.0M" },
+            { name: "Uruguay", continent: "South America", population: "3.5M" },
+            { name: "Uzbekistan", continent: "Asia", population: "34.2M" },
+            { name: "Vanuatu", continent: "Oceania", population: "307,000" },
+            { name: "Venezuela", continent: "South America", population: "28.4M" },
+            { name: "Vietnam", continent: "Asia", population: "97.3M" },
+            { name: "Yemen", continent: "Asia", population: "29.8M" },
+            { name: "Zambia", continent: "Africa", population: "18.4M" },
+            { name: "Zimbabwe", continent: "Africa", population: "14.9M" }
+        ];
+
+        // DOM elements
+        const letterSelector = document.getElementById('letterSelector');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const countriesGrid = document.getElementById('countriesGrid');
+        const resultsCount = document.getElementById('resultsCount');
+        const sortOptions = document.getElementById('sortOptions');
+
+        // Generate letter buttons
+        function generateLetterButtons() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            for (let letter of letters) {
+                const button = document.createElement('button');
+                button.className = 'letter-btn';
+                button.textContent = letter;
+                button.setAttribute('data-letter', letter);
+
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.letter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    // Add active class to clicked button
+                    button.classList.add('active');
+
+                    // Filter and display countries
+                    filterCountriesByLetter(letter);
+                });
+
+                letterSelector.appendChild(button);
+            }
+        }
+
+        // Filter countries by starting letter
+        function filterCountriesByLetter(letter) {
+            const filteredCountries = countries.filter(country =>
+                country.name.toUpperCase().startsWith(letter)
+            );
+
+            displayCountries(filteredCountries);
+        }
+
+        // Search countries by name
+        function searchCountries() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            if (searchTerm === '') {
+                resultsCount.textContent = 'Enter a search term';
+                countriesGrid.innerHTML = '';
+                return;
+            }
+
+            const filteredCountries = countries.filter(country =>
+                country.name.toLowerCase().includes(searchTerm)
+            );
+
+            displayCountries(filteredCountries);
+        }
+
+        // Display countries in the grid
+        function displayCountries(countriesToDisplay) {
+            // Sort countries based on selected option
+            const sortValue = sortOptions.value;
+
+            if (sortValue === 'name-asc') {
+                countriesToDisplay.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortValue === 'name-desc') {
+                countriesToDisplay.sort((a, b) => b.name.localeCompare(a.name));
+            }
+
+            // Update results count
+            resultsCount.textContent = `${countriesToDisplay.length} countries found`;
+
+            // Clear the grid
+            countriesGrid.innerHTML = '';
+
+            // If no countries found
+            if (countriesToDisplay.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.textContent = 'No countries found matching your criteria';
+                countriesGrid.appendChild(noResults);
+                return;
+            }
+
+            // Create country cards
+            countriesToDisplay.forEach(country => {
+                const countryCard = document.createElement('div');
+                countryCard.className = 'country-card';
+
+                // Get first two letters for flag placeholder
+                const flagLetters = country.name.substring(0, 2).toUpperCase();
+
+                countryCard.innerHTML = `
+                    <div class="country-flag">${flagLetters}</div>
+                    <div class="country-info">
+                        <div class="country-name">${country.name}</div>
+                        <div class="country-details">
+                            <div>Continent: ${country.continent}</div>
+                            <div>Population: ${country.population}</div>
+                        </div>
+                    </div>
+                `;
+
+                countriesGrid.appendChild(countryCard);
+            });
+        }
+
+        // Initialize the application
+        function init() {
+            generateLetterButtons();
+
+            // Event listeners
+            searchBtn.addEventListener('click', searchCountries);
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    searchCountries();
+                }
+            });
+
+            sortOptions.addEventListener('change', () => {
+                // If a letter is active, filter by that letter
+                const activeLetterBtn = document.querySelector('.letter-btn.active');
+                if (activeLetterBtn) {
+                    const letter = activeLetterBtn.getAttribute('data-letter');
+                    filterCountriesByLetter(letter);
+                } else if (searchInput.value.trim() !== '') {
+                    // If there's a search term, perform search
+                    searchCountries();
+                }
+            });
+
+            // Display initial message
+            resultsCount.textContent = 'Select a letter to view countries';
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+
+</html>

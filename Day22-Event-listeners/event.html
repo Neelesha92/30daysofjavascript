@@ -1,0 +1,69 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Object Model</title>
+</head>
+
+<body>
+    <button>Click Me</button>
+    <button onclick="clickMe()">Click this onClick button</button>
+    <button class="button">Double Click</button>
+    <button class="button-enter">Mouse enter- hover over me</button>
+
+    <script>
+        const button = document.querySelector('button');
+        button.addEventListener('click', e => {
+            console.log(' e gives the event listener object:', e);
+            console.log('e.target gives the selected element: ', e.target)
+            console.log(
+                'e.target.textContent gives content of selected element: ',
+                e.target.textContent
+            )
+        })
+
+        // onclick- directlyattached to the HTM element as inline script.
+        const clickMe = () => {
+            alert(' We can attach event on HTML element')
+        }
+
+        // Double click- event listener takes event type and callback function as argument
+        const buttonClick = document.querySelector('.button');
+        buttonClick.addEventListener('dblclick', e => {
+            console.log('e gives the event listener object: ', e)
+            console.log('e.target gives the selected element: ', e.target)
+            console.log(
+                'e.target.textContent gives content of selected element: ',
+                e.target.textContent
+            )
+        })
+
+        // mouseenter- when the mouse point enter to the element
+        const buttonEnter = document.querySelector('.button-enter');
+        buttonEnter.addEventListener('mouseenter', e => {
+            console.log('e gives the event listener object: ', e)
+            console.log('e.target gives the selected element:', e.target)
+            console.log(
+                'e.target.textContent gives  content of selected element: ',
+                e.target.textContent
+            )
+        })
+
+        /* events:
+        - mouseleave: when the mouse pointer leave the element
+        - mousemove: when the mouse pointer move on the element
+        - mouseover- when the mouse pointer move on the element
+        - mouseout- when the mouse pointer move out from the element
+        - input- when value enter to input field
+        - change- when value change on input field
+        - blur- when the element is not focused
+        - keydown- when a key is down
+        - keyup= when a key is up
+        - keypress - when we press any key
+        - onload- when the browser has finished loading a page 
+        */
+    </script>
+</body>
+
+</html>

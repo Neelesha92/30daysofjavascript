@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Keyboard Event Example</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .key-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e1e7ff;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3436;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .key-highlight {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #6c5ce7;
+            color: white;
+            border-radius: 6px;
+            margin: 5px;
+            font-size: 18px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Press any key on your keyboard </h2>
+    <p id="output"> Key info will appear here</p>
+
+    <script>
+        const output = document.querySelector('#output')
+
+        document.addEventListener("keydown", (event) => {
+            const keyName = event.key;
+            const keyCode = event.keyCode;
+            const code = event.code;
+
+            output.textContent = `key: ${keyName} | keyCode: ${keyCode} | code: ${code}`;
+            console.log(event);
+        })
+    </script>
+
+</body>
+
+</html>
